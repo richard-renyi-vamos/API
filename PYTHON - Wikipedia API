@@ -1,0 +1,27 @@
+import wikipedia
+import tkinter as tk
+
+window = tk.Tk()
+window.title("Wikipedia Search")
+
+search_box = tk.Entry(window, width=50)
+search_box.pack(pady=10)
+
+def search():
+    query = search_box.get()
+    try:
+        result = wikipedia.summary(query)
+        article_box.delete('1.0', tk.END)
+        article_box.insert(tk.END, result)
+    except wikipedia.exceptions.DisambiguationError as e:
+        result = "\n".join(e.options)
+        article_box.delete('1.0', tk.END)
+        article_box.insert(tk.END, result)
+
+search_button = tk.Button(window, text="Search", command=search)
+search_button.pack(pady=5)
+
+article_box = tk.Text(window, height=30, width=100)
+article_box.pack(padx=10, pady=10)
+
+window.mainloop()
