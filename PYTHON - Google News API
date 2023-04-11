@@ -1,0 +1,39 @@
+import os
+import requests
+
+GOOGLE_NEWS_API = "https://news.google.com/rss"
+
+def fetch_news():
+    response = requests.get(GOOGLE_NEWS_API)
+    if response.status_code == 200:
+        xml_data = response.content
+        return parse_news(xml_data)
+    return None
+
+def parse_news(xml_data):
+    from xml.etree import ElementTree
+    tree = ElementTree.fromstring(xml_data)
+    items = tree.findall("./channel/item")
+    news = []
+    for item in items[:10]:
+        title = item.findtext("title")
+        link = item.findtext("link")
+        description = item.findtext("description")
+        pubDate = item.findtext("pubDate")
+        news.append({"title": title, "link": link, "description": description, "pubDate": pubDate})
+    return news
+
+if __name__ == '__main__':
+    news = fetch_news()
+    if news:
+        desktop_path = os.path.expanduser("~/Desktop")
+        file_path = os.path.join(desktop_path, "news.txt")
+        with open(file_path, "w") as f:
+            for n in news:
+                f.write(f"{n['title']} ({n['pubDate']})\n{n['description']}\n{n['link']}\n\n")
+        print(f"News data saved to file: {file_path}")
+    else:
+        print("Failed to fetch news from Google.")
+
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
