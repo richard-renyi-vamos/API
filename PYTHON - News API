@@ -1,0 +1,20 @@
+import requests
+
+# set your API key here
+API_KEY = 'YOUR_API_KEY'
+
+# make a request to the NewsAPI to get the top 10 news articles about AI
+response = requests.get(f'https://newsapi.org/v2/top-headlines?q=ai&pageSize=10&apiKey={API_KEY}')
+
+# check if the response was successful
+if response.status_code == 200:
+    # get the articles from the response
+    articles = response.json()['articles']
+
+    # print the title and URL of each article
+    for i, article in enumerate(articles):
+        print(f'{i+1}. {article["title"]}')
+        print(article["url"])
+        print()
+else:
+    print(f'Error fetching news articles: {response.status_code}')
