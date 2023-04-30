@@ -1,0 +1,23 @@
+import requests
+import json
+
+# Get the user's location information
+city = input("Enter city name: ")
+country = input("Enter country name (2-letter country code): ")
+
+# Construct the API endpoint URL with your API key and the user's location information
+api_key = "YOUR_API_KEY"
+endpoint = f"http://api.openweathermap.org/data/2.5/weather?q={city},{country}&appid={api_key}"
+
+# Make a request to the API endpoint and retrieve the weather data
+response = requests.get(endpoint)
+data = json.loads(response.text)
+
+# Parse the weather data and display the relevant information to the user
+description = data["weather"][0]["description"]
+temperature = round(data["main"]["temp"] - 273.15, 2)
+humidity = data["main"]["humidity"]
+
+print(f"Description: {description}")
+print(f"Temperature: {temperature}°C")
+print(f"Humidity: {humidity}%")
