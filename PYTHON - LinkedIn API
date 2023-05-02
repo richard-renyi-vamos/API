@@ -1,0 +1,20 @@
+import linkedin_api
+import json
+
+# Initialize LinkedIn API client
+client = linkedin_api.Linkedin()
+
+# Use OAuth2 authentication flow to obtain access token
+access_token = client.get_access_token()
+
+# Search for job postings
+job_postings = client.search_job(
+    keywords='Python developer',
+    location='Budapest'
+)
+
+# Print job postings to console
+for job in job_postings:
+    print(json.dumps(job, indent=4))
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
