@@ -1,0 +1,44 @@
+import requests
+from bs4 import BeautifulSoup
+import random
+from datetime import date
+
+def get_daily_quote():
+    # Fetching today's date
+    today = date.today()
+    date_str = today.strftime("%B_%d")
+
+    # Creating the URL for the current date's quote
+    url = f"https://en.wikiquote.org/wiki/Main_Page/{date_str}"
+
+    # Sending a GET request to the URL
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Finding the quote of the day section
+    quote_section = soup.find('div', {'id': 'mf-qotd'})
+
+    if quote_section is None:
+        return None
+
+    # Extracting the quote and the author
+    quote = quote_section.find('p').text
+    author = quote_section.find('b').text
+
+    return quote, author
+
+def main():
+    # Fetching the daily quote
+    quote = get_daily_quote()
+
+    if quote is not None:
+        print("Quote of the Day:")
+        print(quote[0])
+        print("-" + quote[1])
+    else:
+        print("No quote available for today.")
+
+if __name__ == '__main__':
+    main()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
