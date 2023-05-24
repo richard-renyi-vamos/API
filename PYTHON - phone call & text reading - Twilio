@@ -1,0 +1,27 @@
+from twilio.rest import Client
+from twilio.twiml.voice_response import VoiceResponse
+
+# Twilio account credentials
+account_sid = 'YOUR_ACCOUNT_SID'
+auth_token = 'YOUR_AUTH_TOKEN'
+
+# Phone number to call and text to read
+phone_number = '+1234567890'  # Replace with the phone number you want to call
+text_to_read = 'Hello, this is a test message.'  # Replace with the text you want to read
+
+def make_call():
+    client = Client(account_sid, auth_token)
+    
+    # Create a call and specify the text to read using TwiML
+    call = client.calls.create(
+        url='http://twimlets.com/message?Message%5B0%5D=' + text_to_read,
+        to=phone_number,
+        from_='+0987654321'  # Replace with your Twilio phone number
+    )
+    
+    print("Calling...")
+
+# Start the call
+make_call()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
