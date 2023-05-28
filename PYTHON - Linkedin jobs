@@ -1,0 +1,48 @@
+import requests
+
+# Constants
+CLIENT_ID = 'your_client_id'
+CLIENT_SECRET = 'your_client_secret'
+ACCESS_TOKEN_URL = 'https://www.linkedin.com/oauth/v2/accessToken'
+JOBS_API_URL = 'https://api.linkedin.com/v2/jobSearch'
+
+# Set up access token
+def get_access_token():
+    payload = {
+        'grant_type': 'client_credentials',
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET
+    }
+    response = requests.post(ACCESS_TOKEN_URL, data=payload)
+    access_token = response.json()['access_token']
+    return access_token
+
+# Retrieve top jobs from Budapest
+def get_top_jobs():
+    access_token = get_access_token()
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'X-Restli-Protocol-Version': '2.0.0'
+    }
+    params = {
+        'locationPostalCode': 'Budapest',
+        'sortBy': 'RELEVANT'
+    }
+    response = requests.get(JOBS_API_URL, headers=headers, params=params)
+    jobs = response.json()['elements']
+    return jobs
+
+# Main function
+def main():
+    jobs = get_top_jobs()
+    for job in jobs:
+        print(f"Title: {job['title']}")
+        print(f"Company: {job['companyDetails']['name']}")
+        print(f"Location: {job['locationName']}")
+        print(f"Apply URL: {job['applyMethod']['applyUrl']}")
+        print()
+
+if __name__ == '__main__':
+    main()
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
