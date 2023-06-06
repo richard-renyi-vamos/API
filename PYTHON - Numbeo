@@ -1,0 +1,29 @@
+import requests
+
+def get_average_salary(country):
+    base_url = "https://www.numbeo.com/api/"
+    api_endpoint = f"country_prices?api_key=YOUR_API_KEY&country={country}"
+    
+    try:
+        response = requests.get(base_url + api_endpoint)
+        data = response.json()
+        
+        if "error" in data:
+            print(f"Error: {data['error']}")
+            return None
+        
+        average_salary = data['average_salary']
+        return average_salary
+        
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return None
+
+
+country = "Hungary"
+average_salary = get_average_salary(country)
+
+if average_salary:
+    print(f"The average salary in {country} is {average_salary} USD.")
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
