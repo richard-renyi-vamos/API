@@ -1,0 +1,32 @@
+import requests
+import random
+
+def get_random_quote():
+    url = "https://en.wikiquote.org/w/api.php"
+    params = {
+        "format": "json",
+        "action": "query",
+        "generator": "random",
+        "grnnamespace": "0",
+        "prop": "extracts",
+        "exintro": "",
+        "explaintext": "",
+        "exsectionformat": "plain",
+        "grnlimit": "1"
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+    
+    # Extract the random quote from the API response
+    pages = data['query']['pages']
+    page_id = list(pages.keys())[0]
+    extract = pages[page_id]['extract']
+
+    return extract.strip()
+
+# Get and print a random quote
+random_quote = get_random_quote()
+print(random_quote)
+
+ # CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
