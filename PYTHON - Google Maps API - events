@@ -1,0 +1,32 @@
+import requests
+
+def get_interesting_programs(city, api_key):
+    url = "https://maps.googleapis.com/maps/api/place/textsearch/json"
+    params = {
+        "query": f"events in {city}",
+        "key": api_key
+    }
+
+    try:
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        if data["status"] == "OK":
+            interesting_programs = data["results"][:10]
+            return interesting_programs
+        else:
+            print(f"Error: {data['status']}")
+            return []
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return []
+
+if __name__ == "__main__":
+    city = "New York"  # Replace this with the desired city name
+    api_key = "YOUR_GOOGLE_PLACES_API_KEY"  # Replace this with your API key
+
+    interesting_programs = get_interesting_programs(city, api_key)
+    for i, program in enumerate(interesting_programs, 1):
+        print(f"{i}. {program['name']} - {program['formatted_address']}")
+
+# CREATED WITH THE HELP OF OPEN-AI CHAT GPT: https://chat.openai.com/chat
