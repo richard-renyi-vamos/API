@@ -1,0 +1,39 @@
+import tkinter as tk
+from tkinter import Label, Button
+import wikiquote
+
+# Function to get a random quote
+def get_random_quote():
+    try:
+        # Fetch a random quote using the Wikiquote library
+        random_quote = wikiquote.random_titles(max_titles=1)
+        if random_quote:
+            quote = wikiquote.quotes(random_quote[0])[0]
+            return quote
+        else:
+            return "No quotes found."
+    except Exception as e:
+        return "Failed to fetch a quote."
+
+# Function to update the quote text
+def update_quote():
+    quote = get_random_quote()
+    quote_label.config(text=quote)
+
+# Create a GUI window
+root = tk.Tk()
+root.title("Random WikiQuote")
+
+# Create a label for displaying the quote
+quote_label = Label(root, text="", wraplength=400, justify="center")
+quote_label.pack(pady=20)
+
+# Create a button to fetch and display a new quote
+update_button = Button(root, text="Get Random Quote", command=update_quote)
+update_button.pack()
+
+# Initialize with an initial quote
+update_quote()
+
+# Start the GUI event loop
+root.mainloop()
